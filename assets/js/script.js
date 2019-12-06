@@ -1,11 +1,13 @@
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
-var x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
-var y = (canvas.height - 30)+Math.floor(Math.random()+21)-10;
-var dx = 2;
-var dy = -2;
-var ballRadius = 10;
+// var x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
+// var y = (canvas.height - 30)+Math.floor(Math.random()+21)-10;
+var x = canvas.width/2;
+var y = canvas.height - 30;
+var dx = 1;
+var dy = -1;
+var ballRadius = 20;
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width-paddleWidth)/2;
@@ -23,6 +25,8 @@ var lives = 3;
 var level = 1;
 var maxLevel = 3;
 var paused = false;
+var ball = new Image();
+ball.src = 'https://www.pikpng.com/pngl/m/52-520609_football-ball-png-3d-soccer-ball-clipart-transparent.png';
 
 var bricks = [];
 initBricks();
@@ -73,11 +77,12 @@ function keyUpHandler(e) {
 }
 
 function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    // ctx.beginPath();
+    // ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    // ctx.fillStyle = "#0095DD";
+    // ctx.fill();
+    // ctx.closePath();
+    ctx.drawImage(ball,x, y, ballRadius, ballRadius);
 }
 
 function drawPaddle() {
@@ -97,8 +102,7 @@ function collisionDetection() {
                     dy = -dy;
                     b.status = 0;
                     score++;
-                    if(score == 1){
-                    // if(score == brickRowCount*brickColumnCount){
+                    if(score == brickRowCount*brickColumnCount){
                         if(level === maxLevel){
                             document.location.reload();
                             alert("You Win");
@@ -110,8 +114,10 @@ function collisionDetection() {
                             dx += 1;
                             dy = -dy;
                             dy -= 1;
-                            x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
-                            y = (canvas.height-30)+Math.floor(Math.random()+21)-10;
+                            // x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
+                            // y = (canvas.height-30)+Math.floor(Math.random()+21)-10;
+                            x = canvas.width/2;
+                            y = canvas.height-30;
                             paddleX = (canvas.width-paddleWidth)/2;
                             paused = true;
 
@@ -175,8 +181,10 @@ function draw() {
                 document.location.reload();
                 alert("Game Over");
             }else{
-                x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
-                y = (canvas.height-30)+Math.floor(Math.random()+21)-10;
+                // x = (canvas.width/2)+Math.floor(Math.random()+21)-10;
+                // y = (canvas.height-30)+Math.floor(Math.random()+21)-10;
+                x = canvas.width/2;
+                y = canvas.height-30;
                 paddleX = (canvas.width-paddleWidth)/2;
             }
         }
