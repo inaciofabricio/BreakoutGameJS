@@ -4,7 +4,7 @@ var ctx = canvas.getContext('2d');
 var x = canvas.width/2;
 var y = canvas.height - 30;
 var dx = 2;
-var dy = -2
+var dy = -2;
 var ballRadius = 10;
 var paddleHeight = 10;
 var paddleWidth = 75;
@@ -19,13 +19,19 @@ var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var score = 0;
+var lives = 3;
+var level = 1;
+var maxLevel = 3;
 
 var bricks = [];
-for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = {x:0, y:0, status: 1};        
-    }
+initBricks();
+function initBricks() {
+    for (let c = 0; c < brickColumnCount; c++) {
+        bricks[c] = [];
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks[c][r] = {x:0, y:0, status: 1};        
+        }
+    }  
 }
 
 document.addEventListener("keydown", keyDownHandler);
@@ -91,8 +97,15 @@ function collisionDetection() {
                     b.status = 0;
                     score++;
                     if(score == brickRowCount*brickColumnCount){
-                        document.location.reload();
-                        alert("You Win");
+                        if(level === maxLevel){
+                            document.location.reload();
+                            alert("You Win");
+                        }else{
+                            level++;
+                            initBricks();
+                            score = 0;
+                        }
+                        
                     }
                 }
             }
@@ -106,12 +119,26 @@ function drawScore() {
     ctx.fillText("Score: "+score, 8, 20);
 }
 
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+}
+
+function drawLevel() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Level: "+level, 210, 20);
+}
+
 function draw() { 
     ctx.clearRect(0, 0, canvas.width, canvas.height);    
     drawBall();
     drawPaddle();
     drawBricks();
     drawScore();
+    drawLives();
+    drawLevel();
     collisionDetection();
 
     if(y + dy < ballRadius){
