@@ -22,6 +22,7 @@ var score = 0;
 var lives = 3;
 var level = 1;
 var maxLevel = 3;
+var paused = false;
 
 var bricks = [];
 initBricks();
@@ -96,16 +97,37 @@ function collisionDetection() {
                     dy = -dy;
                     b.status = 0;
                     score++;
-                    if(score == brickRowCount*brickColumnCount){
+                    if(score == 1){
+                    // if(score == brickRowCount*brickColumnCount){
                         if(level === maxLevel){
                             document.location.reload();
                             alert("You Win");
                         }else{
                             level++;
+                            brickRowCount++;
                             initBricks();
                             score = 0;
+                            dx += 1;
+                            dy = -dy;
+                            dy -= 1;
+                            x = canvas.width/2;
+                            y = canvas.height-30;
+                            paddleX = (canvas.width-paddleWidth)/2;
+                            paused = true;
+                            ctx.beginPath();
+                            ctx.rect(0, 0, canvas.width, canvas.height);
+                            ctx.fillStyle = "#0095DD";
+                            ctx.fill();
+                            ctx.font = "16px Arial";
+                            ctx.fillStyle = "#FFFFFF";
+                            ctx.fillText("Level "+ (level -1) + "Completed, starting nrxt level...", 110, 150);
+                            ctx.closePath();
+
+                            setTimeout(function() {
+                                paused = false;
+                                draw();
+                            }, 3000);
                         }
-                        
                     }
                 }
             }
@@ -164,6 +186,10 @@ function draw() {
     
     x += dx;
     y += dy;
+
+    if(!paused){
+        requestAnimationFrame(draw);
+    }
 }
 
 document.addEventListener("mousemove", mouseMoveHandler);
